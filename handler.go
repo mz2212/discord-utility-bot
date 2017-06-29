@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/url"
 	"regexp"
 	"strings"
 
@@ -38,11 +39,24 @@ func messageCreate(client *discordgo.Session, message *discordgo.MessageCreate) 
 
 	// Wolfram Stuff
 	if splitMessage[0] == "#!ask" {
+		if splitMessage[1] == "-image" {
+			// Question handler using the "Simple API"
+			query := strings.Join(splitMessage[2:], " ")
+			img, _, err := wolf.GetSimpleQuery(query, url.Values{})
+			if err != nil {
+				client.ChannelMessageSend(message.ChannelID, "Somthing went wrong... \nCheck console for more info.")
+				fmt.Println("[Wolfram|Alpha] Error: ", err)
+				return
+			}
+			client.ChannelFileSend(message.ChannelID, "simple.gif", img)
+			return // I guess the reader returned is a gif, so I just upload it to discord
+		}
+		// Question handler using the "Short Answer API"
 		query := strings.Join(splitMessage[1:], " ")
 		answer, err := wolf.GetShortAnswerQuery(query, wolfram.Metric, 30)
-		if err != nil {
-			client.ChannelMessageSend(message.ChannelID, fmt.Sprint("Somthing went wrong: ", err))
-			fmt.Println("[Wolfram|Alpha] Somthing went wrong: ", err)
+		if err != nil { // For some reason the area of a football field is still returned in feet
+			client.ChannelMessageSend(message.ChannelID, "Somthing went wrong... \nCheck the console for more info.")
+			fmt.Println("[Wolfram|Alpha] Error: ", err)
 			return
 		}
 		client.ChannelMessageSend(message.ChannelID, answer)
