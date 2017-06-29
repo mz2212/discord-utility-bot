@@ -1,0 +1,12 @@
+[discord]
+key = "YOUR_DISCORD_BOT_KEY"
+
+[wolfram]
+key = "YOUR_WOLFRAM_API_KEY"
+
+[reddit]
+id = "YOUR_BOT_ID"
+secret = "YOUR_BOT_SECRET"
+agent = "YOUR_BOT_USER_AGENT"
+username = "YOUR_REDDIT_USERNAME"
+password = "YOUR_REDDIT_PASSWORD"
