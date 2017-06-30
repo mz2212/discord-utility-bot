@@ -37,6 +37,16 @@ func messageCreate(client *discordgo.Session, message *discordgo.MessageCreate) 
 		return
 	}
 
+	// In chat documentation
+	if splitMessage[0] == "#!help" {
+		channel, err := client.UserChannelCreate(message.Author.ID)
+		if err != nil {
+			fmt.Println("[Discord] Failed to create DM: ", err)
+			return
+		}
+		client.ChannelMessageSend(channel.ID, help())
+	}
+
 	// Wolfram Stuff
 	if splitMessage[0] == "#!ask" {
 		if splitMessage[1] == "-image" {

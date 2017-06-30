@@ -10,4 +10,6 @@ In it's current iteration, it can work with [Reddit](https://reddit.com) and [Wo
 * Generate quotes based on what subreddits say `#!subgen [subreddit]`  
 ### Wolfram|Alpha
 * Answer questions using the [Short Answers API](https://products.wolframalpha.com/short-answers-api/documentation/) `#!ask [question]`
-* Answer questions using the [Simple API](https://products.wolframalpha.com/simple-api/documentation/) `#!ask -image [question]`
+* Answer questions using the [Simple API](https://products.wolframalpha.com/simple-api/documentation/) `#!ask -image [question]`  
+### General
+* Return help in a DM `#!help`
