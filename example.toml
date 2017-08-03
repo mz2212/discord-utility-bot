@@ -10,3 +10,7 @@ secret = "YOUR_BOT_SECRET"
 agent = "YOUR_BOT_USER_AGENT"
 username = "YOUR_REDDIT_USERNAME"
 password = "YOUR_REDDIT_PASSWORD"
+
+[mal]
+username = "YOUR_MAL_USERNAME"
+password = "YOUR_MAL_PASSWORD"

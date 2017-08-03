@@ -54,7 +54,7 @@ func messageCreate(client *discordgo.Session, message *discordgo.MessageCreate) 
 			query := strings.Join(splitMessage[2:], " ")
 			img, _, err := wolf.GetSimpleQuery(query, url.Values{})
 			if err != nil {
-				client.ChannelMessageSend(message.ChannelID, "Somthing went wrong... \nCheck console for more info.")
+				client.ChannelMessageSend(message.ChannelID, errorText())
 				fmt.Println("[Wolfram|Alpha] Error: ", err)
 				return
 			}
@@ -65,11 +65,42 @@ func messageCreate(client *discordgo.Session, message *discordgo.MessageCreate) 
 		query := strings.Join(splitMessage[1:], " ")
 		answer, err := wolf.GetShortAnswerQuery(query, wolfram.Metric, 30)
 		if err != nil { // For some reason the area of a football field is still returned in feet
-			client.ChannelMessageSend(message.ChannelID, "Somthing went wrong... \nCheck the console for more info.")
+			client.ChannelMessageSend(message.ChannelID, errorText())
 			fmt.Println("[Wolfram|Alpha] Error: ", err)
 			return
 		}
 		client.ChannelMessageSend(message.ChannelID, answer)
+		return
+	}
+
+	// MAL stuff
+	if splitMessage[0] == "#!anime" {
+		query := strings.Join(splitMessage[1:], " ")
+		result, _, err := malCli.Anime.Search(query)
+		if err != nil {
+			client.ChannelMessageSend(message.ChannelID, errorText())
+			return
+		}
+		client.ChannelMessageSend(message.ChannelID, animeFormat(result.Rows[0].Title,
+			result.Rows[0].StartDate,
+			result.Rows[0].EndDate,
+			result.Rows[0].Score,
+			result.Rows[0].Episodes))
+		return
+	}
+	if splitMessage[0] == "#!manga" {
+		query := strings.Join(splitMessage[1:], " ")
+		result, _, err := malCli.Manga.Search(query)
+		if err != nil {
+			client.ChannelMessageSend(message.ChannelID, errorText())
+			return
+		}
+		client.ChannelMessageSend(message.ChannelID, mangaFormat(result.Rows[0].Title,
+			result.Rows[0].StartDate,
+			result.Rows[0].EndDate,
+			result.Rows[0].Score,
+			result.Rows[0].Chapters,
+			result.Rows[0].Volumes))
 		return
 	}
 }
